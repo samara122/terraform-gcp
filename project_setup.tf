@@ -25,3 +25,10 @@ resource "null_resource" "project_set" {
       command = "gcloud config set project ${google_project.samara_gcp_project1.project_id}"
   }
 }
+
+resource "null_resource" "project_unset" {
+  provisioner "local-exec" {
+      when = destroy
+      command = "gcloud config unset project"
+  }
+}
