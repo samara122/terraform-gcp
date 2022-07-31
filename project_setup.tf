@@ -32,3 +32,23 @@ resource "null_resource" "project_unset" {
       command = "gcloud config unset project"
   }
 }
+
+resource "null_resource" "gcp-api-enable" {
+  depends_on = [
+    google_project.samara_gcp_project1,
+    null_resource.project_set
+  ]
+
+  triggers = {
+    "always_run" = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+      command = <<-EOT
+        gcloud services enable compute.googleapis.com
+        gcloud services enable dns.googleapis.com
+        gcloud services enable storage-api.googleapis.com
+        gcloud services enable container.googleapis.com
+      EOT
+  }
+}
